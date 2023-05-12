@@ -16,7 +16,7 @@ import random
 # nltk.download('punkt')
 
 TAG_CLASSES = ["人物", "动物", "时间", "天气", "物品", "地点", "景物", "色彩"]
-SIMI_TAG_CLASSES = ["画面构图", "画面主体", "画面背景", "画面细节", "例如", "添加细节"]
+SIMI_TAG_CLASSES = ["画面构图", "画面主体", "画面背景", "画面细节", "例如", "添加细节", "细节丰富"]
 TAG_STRING = "、".join(TAG_CLASSES)
 
 # TODO 4.2
