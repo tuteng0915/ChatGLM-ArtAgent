@@ -18,10 +18,20 @@ $ pip install -r requirements.txt
 2. 安装 nltk 模型及数据
 ```shell
 $ python
-$ import nltk
-$ nltk.download('stopwords')
-$ nltk.download('punkt')
+>>> import nltk
+>>> nltk.download('stopwords')
+>>> nltk.download('punkt')
+>>> nltk.download('averaged_perceptron_tagger')
 ```
+
+或者通过此链接下载数据：`https://cloud.tsinghua.edu.cn/f/1831442f5e734d7da61a/`
+```shell
+$ python
+>>> import nltk
+>>> nltk.data.path
+```
+并置于该命令所打印的任一位置
+
 
 3. 调整 ChatGLM-6B 和 Stable Diffusion 接口
 ```python

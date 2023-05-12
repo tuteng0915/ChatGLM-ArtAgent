@@ -61,7 +61,7 @@ print("tags loaded")
 
 # TODO 4.4
 def enhance_prompts(pos_prompt, tag_dict_):
-    pos_prompt = BASE_POS_PROMPT  + pos_prompt
+    pos_prompt = STYLIZED_PROMPT  + pos_prompt
     if "1girl" in pos_prompt or "1boy" in pos_prompt:
         pos_prompt += ", ((an extremely delicate and beautiful)), (detailed eyes), (detailed face)"
     neg_prompt = BASE_NEG_PROMPT
