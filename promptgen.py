@@ -17,6 +17,10 @@ import random
 
 TAG_CLASSES = ["人物", "动物", "时间", "天气", "物品", "地点", "景物", "色彩"]
 SIMI_TAG_CLASSES = ["画面构图", "画面主体", "画面背景", "画面细节", "例如", "添加细节", "细节丰富"]
+BASE_POS_PROMPT = "((masterpiece, best quality, ultra-detailed, illustration)),"
+BASE_NEG_PROMPT = "((nsfw: 1.2)), (EasyNegative:0.8), (badhandv4:0.8), (worst quality, low quality, extra digits), lowres, blurry, text, logo, artist name, watermark"
+STYLIZED_PROMPT = "abstract geometric artwork, organic, ((ech_gen)), die cut, gradient, logo, ((half tone)), earth tones, GUI, Bauhaus, Ani Albers, ((intricate)), sverchok, Houdini particle simulation"
+
 TAG_STRING = "、".join(TAG_CLASSES)
 
 # TODO 4.2
@@ -57,10 +61,10 @@ print("tags loaded")
 
 # TODO 4.4
 def enhance_prompts(pos_prompt, tag_dict_):
-    pos_prompt = "((masterpiece, best quality, ultra-detailed, illustration)),"  + pos_prompt
+    pos_prompt = BASE_POS_PROMPT  + pos_prompt
     if "1girl" in pos_prompt or "1boy" in pos_prompt:
         pos_prompt += ", ((an extremely delicate and beautiful)), (detailed eyes), (detailed face)"
-    neg_prompt = "((nsfw: 1.2)), (EasyNegative:0.8), (badhandv4:0.8), (worst quality, low quality, extra digits), lowres, blurry, text, logo, artist name, watermark"
+    neg_prompt = BASE_NEG_PROMPT
     if "人物" not in tag_dict_:
         neg_prompt += "human, 1girl, 1boy, loli, male, female, people"
     return (pos_prompt, neg_prompt)
