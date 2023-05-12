@@ -16,6 +16,7 @@ import random
 # nltk.download('punkt')
 
 TAG_CLASSES = ["人物", "动物", "时间", "天气", "物品", "地点", "景物", "色彩"]
+SIMI_TAG_CLASSES = ["画面构图", "画面主体", "画面背景", "画面细节", "例如", "添加细节"]
 TAG_STRING = "、".join(TAG_CLASSES)
 
 # TODO 4.2
@@ -128,8 +129,11 @@ def tag_extract(tag_dict_, batch_size=8, mask_ratio=0.3):
         return [w[0] for w in word_tags if w[1][0] in "GMNRV"]
 
     for t in tag_dict_:
-        words_ += get_content_word(tag_dict_[t])
-        
+        if t == "其他":
+            words_ += get_content_word(tag_dict_[t])
+        elif t in TAG_CLASSES:
+            words += tag_dict_[t].split(",")
+
     words_ = list(set(words_))
     print(words_)
     

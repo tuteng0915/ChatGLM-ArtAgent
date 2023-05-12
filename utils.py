@@ -234,7 +234,7 @@ def gen_image_description(user_input, chatbot, max_length, top_p, temperature, h
     write_log()
 
     # print(history[-1])
-    return chatbot, history, parse_text(response), "SUCCESS"
+    return chatbot, history, parse_text(response) + "\n" + chatbot[-1][1], "SUCCESS"
 
 
 
@@ -268,7 +268,7 @@ def sd_predict(user_input, chatbot, max_length, top_p, temperature, history, wid
         #             tag_dict[tag_class] = find[0][len(tag_class) + 1: -1]
         
         # base on find
-        TAG_CLASSES_ = TAG_CLASSES + ["构图", "主体", "背景", "内容"]
+        TAG_CLASSES_ = TAG_CLASSES + SIMI_TAG_CLASSES
         tag_pos_dict = {}
         for t in TAG_CLASSES_:
             pos = image_description.find(t+"：")

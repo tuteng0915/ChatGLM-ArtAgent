@@ -1,7 +1,7 @@
 import gradio as gr
 from utils import *
 
-greetings = [("你好呀！", "您好！我是 ChatGLM-ArtAgent，一个与您交流艺术构思的AI助手。 \n\n 我调用了 ChatGLM-6B LLM模型，和 Stable Diffusion LDM模型。\n\n 我还在测试阶段，链路中也存在很多随机性：Sometimes a simple retry can make it betteer.")]
+greetings = [("你好呀！", "您好！我是 ChatGLM-ArtAgent，一个与您交流艺术构思的AI助手。 \n\n 我调用了 ChatGLM-6B LLM 模型，和 Stable Diffusion LDM 模型。\n\n 我目前只擅长生成景物，偶尔会不受控地生成人物。 \n\n 我还在测试阶段，链路中也存在很多随机性： \n\n Sometimes a simple retry can make it betteer.")]
 
 gr.Chatbot.postprocess = postprocess
 
