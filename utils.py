@@ -95,10 +95,24 @@ def parse_text(text):
     return text
 
 
-def translate(word):
+def translate_by_glm(word):
+    for p in ["！", "，"]:
+            word = word.replace(p, "。")
+    words = word.split("。")
+    trans_result = ""
+    for word in words:
+        word = word.strip()
+        if len(word) > 0:
+            trans_result += call_glm_api("翻译："+ word, [], 1024, 0.6, 0.9)["response"].strip()              
+    return trans_result
+
+def translate_by_youdao(word, by="GLM"):
+    trans_result = ''
     url = 'http://fanyi.youdao.com/translate?smartresult=dict&smartresult=rule&smartresult=ugc&sessionFrom=null'
     key = {
-        'type': "AUTO",
+        # 'type': "AUTO",
+        'from': "zh-CHS",
+        'to': "en",
         'i': word,
         "doctype": "json",
         "version": "2.1",
@@ -111,13 +125,12 @@ def translate(word):
     if response.status_code == 200:
         list_trans = response.text
         result = json.loads(list_trans)
-        trans = ""
         for r in result['translateResult'][0]:
-            trans += r['tgt']
-        return trans
+            trans_result += r['tgt']
     else:
         print(response.status_code)
         return word
+    return trans_result
 
 
 def call_sd_t2i(pos_prompt, neg_prompt, width, height, steps, cfg, user_input=""):
@@ -254,7 +267,8 @@ def sd_predict(user_input, chatbot, max_length, top_p, temperature, history, wid
         # stop_words = ["好的", "我", "将", "会", "画作", "关于", "一张", "画"]
         stop_words = ["\t", "\r", '-', '*', '·', "<br>"]
         for word in stop_words:
-            image_description = image_description.replace(word, "\n") + "\n"
+            image_description = image_description.replace(word, "\n")
+        image_description += "\n"
         # print(image_description)
         tag_dict = {}
 
@@ -295,7 +309,7 @@ def sd_predict(user_input, chatbot, max_length, top_p, temperature, history, wid
             tag_dict["其他"] = image_description
             print(tag_dict)
         
-        tag_dict = dict([(tag, translate(tag_dict[tag]).lower()) for tag in tag_dict if len(tag_dict[tag]) > 0])
+        tag_dict = dict([(tag, translate_by_youdao(tag_dict[tag]).lower() if tag in TAG_CLASSES else translate_by_glm(tag_dict[tag]).lower()) for tag in tag_dict if len(tag_dict[tag]) > 0])
         print(tag_dict)        
         file_handle.write(str(tag_dict) + "\n")
         # image_description = translate(image_description)
@@ -325,4 +339,3 @@ def sd_predict(user_input, chatbot, max_length, top_p, temperature, history, wid
             result_list = result_list + new_images
             yield chatbot, history, result_list, new_images
         yield chatbot, history, result_list, result_list
-

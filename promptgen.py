@@ -20,7 +20,7 @@ SIMI_TAG_CLASSES = ["画面构图", "画面主体", "画面背景", "画面细�
 BASE_POS_PROMPT = "((masterpiece, best quality, ultra-detailed, illustration)),"
 BASE_NEG_PROMPT = "((nsfw: 1.2)), (EasyNegative:0.8), (badhandv4:0.8), (worst quality, low quality, extra digits), lowres, blurry, text, logo, artist name, watermark"
 STYLIZED_PROMPT = "abstract geometric artwork, organic, ((ech_gen)), die cut, gradient, logo, ((half tone)), earth tones, GUI, Bauhaus, Ani Albers, ((intricate)), sverchok, Houdini particle simulation"
-PUNCTUATIONS = [",", ".", "/", ";", "[", "]", "-", "=", "!", "(", ")", "?" "。", "，", "、", "：", "？", "！"]
+PUNCTUATIONS = [",", ".", "/", ";", "[", "]", "-", "=", "!", "(", ")", "?" "。", "，", "、", "：", "？", "！", "“", "”", "‘", "’", "'", '"']
 
 TAG_STRING = "、".join(TAG_CLASSES)
 
