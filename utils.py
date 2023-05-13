@@ -140,6 +140,7 @@ def call_sd_t2i(pos_prompt, neg_prompt, width, height, steps, cfg, user_input=""
     r = response.json()
     # print(r)
     image_list = []
+    os.makedirs('output', exist_ok=True)
     for i in r['images']:
         image = Image.open(io.BytesIO(base64.b64decode(i.split(",",1)[0])))
         image_list.append(image)
@@ -282,7 +283,7 @@ def sd_predict(user_input, chatbot, max_length, top_p, temperature, history, wid
             r = tag_pos_dict[index+1][2]
             tmp = image_description[l:r]
             if "不清楚" not in tmp and "无" not in tmp and "没有描述" not in tmp and "不知道" not in tmp and "未指定" not in tmp:
-                tmp = tmp.replace('\n', ", ")
+                tmp = tmp.replace('\n', "")
                 tag_dict[tag_pos_dict[index][1]] = tmp
 
         print(tag_dict)

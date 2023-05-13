@@ -20,6 +20,7 @@ SIMI_TAG_CLASSES = ["画面构图", "画面主体", "画面背景", "画面细�
 BASE_POS_PROMPT = "((masterpiece, best quality, ultra-detailed, illustration)),"
 BASE_NEG_PROMPT = "((nsfw: 1.2)), (EasyNegative:0.8), (badhandv4:0.8), (worst quality, low quality, extra digits), lowres, blurry, text, logo, artist name, watermark"
 STYLIZED_PROMPT = "abstract geometric artwork, organic, ((ech_gen)), die cut, gradient, logo, ((half tone)), earth tones, GUI, Bauhaus, Ani Albers, ((intricate)), sverchok, Houdini particle simulation"
+PUNCTUATIONS = [",", ".", "/", ";", "[", "]", "-", "=", "!", "(", ")", "?" "。", "，", "、", "：", "？", "！"]
 
 TAG_STRING = "、".join(TAG_CLASSES)
 
@@ -107,9 +108,9 @@ def gen_prompts(text, batch_size=4):
 
 # TODO 4.3
 def tag_extract(tag_dict_, batch_size=8, mask_ratio=0.3):
-    punctuations = [",", ".", "/", ";", "[", "]", "-", "=", "!", "(", ")", "?" "。", "，", "、", "：", "？", "！"]
+    
     words = word_tokenize(" , ".join([tag_dict_[t] for t in tag_dict_]))
-    words = [w for w in words if w not in punctuations]
+    words = [w for w in words if w not in PUNCTUATIONS]
     words += [PorterStemmer().stem(w) for w in words if w not in set(stopwords.words("english"))]
     # print(words)
     
