@@ -70,4 +70,5 @@ with gr.Blocks(title="ChatGLM ArtAgent") as demo:
     # emptyBtn.click(reset_state, outputs=[chatbot, history], show_progress=True)
     # clearBtn.click(clear_gallery, outputs=[result_list, result_gallery], show_progress=True)
 
+os.makedirs('output', exist_ok=True)
 demo.queue().launch(share=False, inbrowser=True, server_name='127.0.0.1', server_port=6006, favicon_path="./favicon.ico")

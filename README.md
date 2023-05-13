@@ -139,3 +139,11 @@ Running on local URL:  http://127.0.0.1:6006
 * https://github.com/LemonQu-GIT/ChatGLM-6B-Engineering
 
 * https://github.com/DominikDoom/a1111-sd-webui-tagcomplete
+
+
+## 报错答疑
+
+* 形如这样的错误，一般来源于 api 配置问题。请检查 ChatGLM-6B api 是否已部署其端口配置正确，检查 AUTOMATIC1111/stable-diffusion-webui 是否已部署且开启了 --api
+```shell
+requests.exceptions.ConnectionError: HTTPConnectionPool(host='127.0.0.1', port=8000): Max retries exceeded with url: / (Caused by NewConnectionError('<urllib3.connection.HTTPConnection object at 0x0000021A087AFD30>: Failed to establish a new connection: [WinError 10061] 由于目标计算机积极 拒绝，无法连接。'))
+```
