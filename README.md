@@ -6,6 +6,7 @@
 
 ### 安装指南
 
+**注意：本项目使用了 ChatGLM-6B 和 Stable Diffusion 这意味着，您需要有足够的算力来同时运行这两个模型。本项目本身没有 GPU 开销，因此，推荐您将 ChatGLM-6B 与 Stable Diffusion部署在您的计算型服务器上**
 
 1. clone 本项目并安装依赖
 
@@ -16,6 +17,9 @@ $ pip install -r requirements.txt
 ```
 
 2. 安装 nltk 模型及数据
+
+方法一：通过 python nltk 库安装
+
 ```shell
 $ python
 >>> import nltk
@@ -24,24 +28,24 @@ $ python
 >>> nltk.download('averaged_perceptron_tagger')
 ```
 
-或者通过此链接下载数据：`https://cloud.tsinghua.edu.cn/f/1831442f5e734d7da61a/`
+方法二：通过此链接下载数据：`https://cloud.tsinghua.edu.cn/f/1831442f5e734d7da61a/`
 ```shell
 $ python
 >>> import nltk
 >>> nltk.data.path
 ```
-并置于该命令所打印的任一位置
+将文件解压后，置于该命令所打印的任一位置下即可
 
 
 3. 调整 ChatGLM-6B 和 Stable Diffusion 接口
 ```python
 # ./utils.py/call_glm_api
 def call_glm_api(prompt, history, max_length, top_p, temperature):
-    url = "http://127.0.0.1:8000"       # 将改行修改为 ChatGLM-6B 地址
+    url = "http://127.0.0.1:8000"       # 将改行修改为您部署的 ChatGLM-6B api 地址
 
 # ./utils.py/call_sd_t2i
 def call_sd_t2i(pos_prompt, neg_prompt, width, height, steps, user_input=""):
-    url = "http://127.0.0.1:6016"       # 将该行修改为 AUTOMATIC1111/stable-diffusion-webui 地址
+    url = "http://127.0.0.1:6016"       # 将该行修改为 AUTOMATIC1111/stable-diffusion-webui 地址，并开放api
 ```
 
 <!-- 4. 下载 promptgen_model 置于 ./model/promptgen-lexart
@@ -56,7 +60,9 @@ promptgen_model loaded
 danbooru tags loaded
 Running on local URL:  http://127.0.0.1:6006
 ```
-浏览器访问 `localhost:6006` 即可
+浏览器访问 `localhost:6006` 即可。
+
+注意，如果您可以成功打开网页
 
 #### 硬件需求
 
