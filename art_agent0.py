@@ -53,4 +53,4 @@ with gr.Blocks(title="ChatGLM ArtAgent (User Version)") as demo:
 
 
 demo.queue().launch(share=False, inbrowser=True, server_name='127.0.0.1', server_port=6026, favicon_path="./favicon.ico")
-# 阉割版端口在6026，不需要在VScode里提前转发
+# 阉割版端口在6026，部署在服务器上后，要在本地的VScode里提前转发
