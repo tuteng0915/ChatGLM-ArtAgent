@@ -9,4 +9,3 @@ accelerate
 jieba
 pandas
 tqdm
-nltk
