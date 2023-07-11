@@ -16,16 +16,6 @@ import re
 from tqdm import tqdm
 
 
-max_length = 2048
-top_p = 0.6
-temperature = 0.90
-sd_width = 768
-sd_height = 768
-sd_batch_num = 4
-sd_batch_size = 2
-sd_steps = 32
-sd_cfg = 7
-
 # glm_tokenizer = AutoTokenizer.from_pretrained("./model/ChatGLM-6B", trust_remote_code=True)
 glm_tokenizer = None
 # glm_model = AutoModel.from_pretrained("./model/ChatGLM-6B", trust_remote_code=True).half().quantize(4).cuda()
@@ -130,7 +120,7 @@ def translate(word):
         return word
 
 
-def call_sd_t2i(pos_prompt, neg_prompt, user_input=""):
+def call_sd_t2i(pos_prompt, neg_prompt, width, height, steps, cfg, user_input=""):
     url = "http://127.0.0.1:6016"
     payload = {
         "enable_hr": True,
@@ -138,13 +128,13 @@ def call_sd_t2i(pos_prompt, neg_prompt, user_input=""):
         "hr_scale": 1.5,
         "hr_upscaler": "Latent",
         "prompt": pos_prompt,
-        "steps": sd_steps,
+        "steps": steps,
         "negative_prompt": neg_prompt,
-        "cfg_scale": sd_cfg,
+        "cfg_scale": cfg,
         "batch_size": 1,
         "n_iter": 1,
-        "width": sd_width,
-        "height": sd_height,
+        "width": width,
+        "height": height,
     }
     response = requests.post(url=f'{url}/sdapi/v1/txt2img', json=payload)
     r = response.json()
@@ -165,7 +155,7 @@ def call_sd_t2i(pos_prompt, neg_prompt, user_input=""):
     return image_list
 
 
-def call_glm_api(prompt, history):
+def call_glm_api(prompt, history, max_length, top_p, temperature):
     url = "http://127.0.0.1:8000"
     payload = {
         "prompt": prompt,
@@ -180,7 +170,7 @@ def call_glm_api(prompt, history):
     return response
 
 
-def gen_image_description(user_input, chatbot, history, file_handle, from_api=True):
+def gen_image_description(user_input, chatbot, max_length, top_p, temperature, history, file_handle, from_api=True):
     # TODO 4.1
     def get_respond(prompt_history, prompt_input):
         if not from_api:
@@ -214,7 +204,7 @@ def gen_image_description(user_input, chatbot, history, file_handle, from_api=Tr
 
     # Step3 作画素材
     prompt_history = [["我接下来会给你一些作画的指令，你只要回复出作画内容及对象，不需要你作画，不需要给我参考，请直接给出作画内容，不要输出不必要的内容，你只需回复作画内容。你听懂了吗", "听懂了。请给我一些作画的指令。"]]
-    prompt_input = str(f"我现在要画一副画，这幅画关于：{response}。请帮我详细描述作画中的画面构图、画面主体和画面背景，并添加一些内容以丰富细节。回答中不要包含这一句话")
+    prompt_input = str(f"我现在要画一幅画，这幅画关于：{response}。请帮我详细描述作画中的画面构图、画面主体和画面背景，并添加一些内容以丰富细节。回答中不要包含这一句话")
     response = get_respond(prompt_history, prompt_input)
     print("Step3", response)
     write_log()
@@ -234,7 +224,7 @@ def gen_image_description(user_input, chatbot, history, file_handle, from_api=Tr
     #     history.append([chatbot[-1][0], chatbot[-1][1]])
     #     return chatbot, history, parse_text(response), "FAILED"
 
-    chatbot.append((parse_text("请帮我画："+ user_input), parse_text(response)))
+    chatbot.append((parse_text("请帮我画："+user_input), parse_text(response)))
     history.append([chatbot[-1][0], chatbot[-1][1]])
 
     # Step4 作画素材
@@ -249,8 +239,7 @@ def gen_image_description(user_input, chatbot, history, file_handle, from_api=Tr
 
 
 
-def sd_predict(user_input, chatbot, history, result_list):
-
+def sd_predict(user_input, chatbot, max_length, top_p, temperature, history, width, height, steps, cfg, result_list):
     file_handle = open('output/'+ time.strftime("%Y-%m-%d-%H-%M-%S-", time.localtime()) + str(user_input[:12]) + '.txt', 'w', encoding="utf8")
     
     # Step 1 use ChatGLM-6B associate image description
@@ -332,7 +321,7 @@ def sd_predict(user_input, chatbot, history, result_list):
 
         # Step 3 use SD get images
         for pos_prompt, neg_prompt in tqdm(prompt_list):
-            new_images = call_sd_t2i(pos_prompt, neg_prompt, sd_width, sd_height, sd_steps, sd_cfg, user_input)
+            new_images = call_sd_t2i(pos_prompt, neg_prompt, width, height, steps, cfg, user_input)
             result_list = result_list + new_images
             yield chatbot, history, result_list, new_images
         yield chatbot, history, result_list, result_list
